@@ -47,6 +47,25 @@ public class TasksFragment extends Fragment  implements TasksContract.View {
         return inflater.inflate(R.layout.tasks_frag, container, false);
     }
 
+    /**
+     * Listener for clicks on tasks in the ListView.
+     */
+    TaskItemListener mItemListener = new TaskItemListener() {
+        @Override
+        public void onTaskClick(Task clickedTask) {
+            mPresenter.openTaskDetails(clickedTask);
+        }
+
+        @Override
+        public void onCompleteTaskClick(Task completedTask) {
+            mPresenter.completeTask(completedTask);
+        }
+
+        @Override
+        public void onActivateTaskClick(Task activatedTask) {
+            mPresenter.activateTask(activatedTask);
+        }
+    };
 
     private static class TasksAdapter extends BaseAdapter {
 
