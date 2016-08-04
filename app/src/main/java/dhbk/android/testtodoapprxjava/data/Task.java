@@ -49,4 +49,12 @@ public class Task {
     }
 
 
+    @Nullable
+    public String getTitleForList() {
+        if (mTitle != null && !mTitle.equals("")) {
+            return mTitle;
+        } else {
+            return mDescription;
+        }
+    }
 }
