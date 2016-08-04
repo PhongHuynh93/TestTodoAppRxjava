@@ -67,6 +67,13 @@ public class TasksFragment extends Fragment  implements TasksContract.View {
         }
     };
 
+
+    public interface TaskItemListener {
+        void onTaskClick(Task clickedTask);
+        void onCompleteTaskClick(Task completedTask);
+        void onActivateTaskClick(Task activatedTask);
+    }
+
     private static class TasksAdapter extends BaseAdapter {
 
         private List<Task> mTasks;
