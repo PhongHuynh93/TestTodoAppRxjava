@@ -3,14 +3,19 @@ package dhbk.android.testtodoapprxjava.task;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -44,8 +49,59 @@ public class TasksFragment extends Fragment  implements TasksContract.View {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.tasks_frag, container, false);
+        View root = inflater.inflate(R.layout.tasks_frag, container, false);
+
+        // Set up tasks view
+        ListView listView = (ListView) root.findViewById(R.id.tasks_list);
+        listView.setAdapter(mListAdapter);
+        mFilteringLabelView = (TextView) root.findViewById(R.id.filteringLabel);
+        mTasksView = (LinearLayout) root.findViewById(R.id.tasksLL);
+
+        // Set up  no tasks view
+        mNoTasksView = root.findViewById(R.id.noTasks);
+        mNoTaskIcon = (ImageView) root.findViewById(R.id.noTasksIcon);
+        mNoTaskMainView = (TextView) root.findViewById(R.id.noTasksMain);
+        mNoTaskAddView = (TextView) root.findViewById(R.id.noTasksAdd);
+        mNoTaskAddView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddTask();
+            }
+        });
+
+        // Set up floating action button
+        FloatingActionButton fab =
+                (FloatingActionButton) getActivity().findViewById(R.id.fab_add_task);
+
+        fab.setImageResource(R.drawable.ic_add);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.addNewTask();
+            }
+        });
+
+        // Set up progress indicator
+        final ScrollChildSwipeRefreshLayout swipeRefreshLayout =
+                (ScrollChildSwipeRefreshLayout) root.findViewById(R.id.refresh_layout);
+        swipeRefreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(getActivity(), R.color.colorPrimary),
+                ContextCompat.getColor(getActivity(), R.color.colorAccent),
+                ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark)
+        );
+        // Set the scrolling view in the custom SwipeRefreshLayout.
+        swipeRefreshLayout.setScrollUpChild(listView);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.loadTasks(false);
+            }
+        });
+
+        setHasOptionsMenu(true);
+
+        return root;
     }
 
     @Override
