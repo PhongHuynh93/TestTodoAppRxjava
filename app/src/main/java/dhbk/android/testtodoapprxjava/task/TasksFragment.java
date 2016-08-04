@@ -28,13 +28,13 @@ import dhbk.android.testtodoapprxjava.data.Task;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class TasksFragment extends Fragment  implements TasksContract.View {
+public class TasksFragment extends Fragment implements TasksContract.View {
 
     private TasksContract.Presenter mPresenter;
     private TasksAdapter mListAdapter;
     private TextView mFilteringLabelView; // title above list
     private LinearLayout mTasksView; // container which contains listview
-//    no task
+    //    no task
     private View mNoTasksView;
     private ImageView mNoTaskIcon;
     private TextView mNoTaskMainView;
@@ -125,6 +125,7 @@ public class TasksFragment extends Fragment  implements TasksContract.View {
         super.onPause();
         mPresenter.unsubscribe();
     }
+
     /**
      * Listener for clicks on tasks in the ListView.
      */
@@ -148,7 +149,9 @@ public class TasksFragment extends Fragment  implements TasksContract.View {
 
     public interface TaskItemListener {
         void onTaskClick(Task clickedTask);
+
         void onCompleteTaskClick(Task completedTask);
+
         void onActivateTaskClick(Task activatedTask);
     }
 
@@ -274,19 +277,49 @@ public class TasksFragment extends Fragment  implements TasksContract.View {
     }
 
 
+    /**
+     * depend of type of task (active, complete, all) we 'll show different layout with text and icon
+     */
     @Override
     public void showNoActiveTasks() {
-
+        showNoTasksViews(
+                getResources().getString(R.string.no_tasks_active),
+                R.drawable.ic_check_circle_24dp,
+                false
+        );
     }
 
     @Override
     public void showNoCompletedTasks() {
-
+        showNoTasksViews(
+                getResources().getString(R.string.no_tasks_completed),
+                R.drawable.ic_verified_user_24dp,
+                false
+        );
     }
 
     @Override
     public void showNoTasks() {
+        showNoTasksViews(
+                getResources().getString(R.string.no_tasks_all),
+                R.drawable.ic_assignment_turned_in_24dp,
+                false
+        );
+    }
 
+    /**
+     *  show different layout with text and icon when no tasks found
+     * @param mainText
+     * @param iconRes
+     * @param showAddView
+     */
+    private void showNoTasksViews(String mainText, int iconRes, boolean showAddView) {
+        mTasksView.setVisibility(View.GONE);
+        mNoTasksView.setVisibility(View.VISIBLE);
+
+        mNoTaskMainView.setText(mainText);
+        mNoTaskIcon.setImageDrawable(getResources().getDrawable(iconRes));
+        mNoTaskAddView.setVisibility(showAddView ? View.VISIBLE : View.GONE);
     }
 
     /**
@@ -302,5 +335,13 @@ public class TasksFragment extends Fragment  implements TasksContract.View {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         mPresenter.result(requestCode, resultCode);
+    }
+
+    /**
+     * show a snackbar to indicate that we have success in adding tasks
+     */
+    @Override
+    public void showSuccessfullySavedMessage() {
+        showMessage(getString(R.string.successfully_saved_task_message));
     }
 }

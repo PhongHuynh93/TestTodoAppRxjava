@@ -1,16 +1,17 @@
 package dhbk.android.testtodoapprxjava.task;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import dhbk.android.testtodoapprxjava.addedittask.AddEditTaskActivity;
 import dhbk.android.testtodoapprxjava.data.Task;
 import dhbk.android.testtodoapprxjava.data.source.TasksRepository;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -171,8 +172,16 @@ public class TasksPresenter implements TasksContract.Presenter{
         }
     }
 
+    /**
+     * return from add todo list
+     * @param requestCode
+     * @param resultCode
+     */
     @Override
     public void result(int requestCode, int resultCode) {
-
+        // If a task was successfully added, show snackbar
+        if (AddEditTaskActivity.REQUEST_ADD_TASK == requestCode && Activity.RESULT_OK == resultCode) {
+            mTasksView.showSuccessfullySavedMessage();
+        }
     }
 }
