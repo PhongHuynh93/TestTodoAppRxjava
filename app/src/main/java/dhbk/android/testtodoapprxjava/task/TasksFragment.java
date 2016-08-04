@@ -48,6 +48,17 @@ public class TasksFragment extends Fragment  implements TasksContract.View {
         return inflater.inflate(R.layout.tasks_frag, container, false);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.subscribe();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.unsubscribe();
+    }
     /**
      * Listener for clicks on tasks in the ListView.
      */
