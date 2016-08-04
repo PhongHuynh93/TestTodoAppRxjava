@@ -24,6 +24,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class TasksFragment extends Fragment  implements TasksContract.View {
 
     private TasksContract.Presenter mPresenter;
+    private TasksAdapter mListAdapter;
 
     public TasksFragment() {
         // Required empty public constructor
