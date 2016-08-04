@@ -91,11 +91,13 @@ public class TasksFragment extends Fragment  implements TasksContract.View {
         private List<Task> mTasks;
         private TaskItemListener mItemListener;
 
+        // set data and callback to adapter constructor
         public TasksAdapter(List<Task> tasks, TaskItemListener itemListener) {
             setList(tasks);
             mItemListener = itemListener;
         }
 
+        // replace new data
         public void replaceData(List<Task> tasks) {
             setList(tasks);
             notifyDataSetChanged();
