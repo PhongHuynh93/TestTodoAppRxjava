@@ -16,6 +16,8 @@ import dhbk.android.testtodoapprxjava.data.Task;
 public interface TasksContract {
     interface View extends BaseView<Presenter> {
 
+        void showAddTask();
+
         void setLoadingIndicator(boolean b);
 
         void showLoadingTasksError();
@@ -31,5 +33,7 @@ public interface TasksContract {
 
     interface Presenter extends BasePresenter {
         void loadTasks(boolean forceUpdate);
+
+        void result(int requestCode, int resultCode);
     }
 }

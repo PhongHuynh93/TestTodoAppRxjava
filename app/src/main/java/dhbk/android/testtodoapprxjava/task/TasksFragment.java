@@ -1,5 +1,6 @@
 package dhbk.android.testtodoapprxjava.task;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dhbk.android.testtodoapprxjava.R;
+import dhbk.android.testtodoapprxjava.addedittask.AddEditTaskActivity;
 import dhbk.android.testtodoapprxjava.data.Task;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -30,6 +32,13 @@ public class TasksFragment extends Fragment  implements TasksContract.View {
 
     private TasksContract.Presenter mPresenter;
     private TasksAdapter mListAdapter;
+    private TextView mFilteringLabelView; // title above list
+    private LinearLayout mTasksView; // container which contains listview
+//    no task
+    private View mNoTasksView;
+    private ImageView mNoTaskIcon;
+    private TextView mNoTaskMainView;
+    private TextView mNoTaskAddView;
 
     public TasksFragment() {
         // Required empty public constructor
@@ -103,6 +112,7 @@ public class TasksFragment extends Fragment  implements TasksContract.View {
 
         return root;
     }
+
 
     @Override
     public void onResume() {
@@ -277,5 +287,20 @@ public class TasksFragment extends Fragment  implements TasksContract.View {
     @Override
     public void showNoTasks() {
 
+    }
+
+    /**
+     * when we want to add a new task, it's will show by calling different activity
+     */
+
+    @Override
+    public void showAddTask() {
+        Intent intent = new Intent(getContext(), AddEditTaskActivity.class);
+        startActivityForResult(intent, AddEditTaskActivity.REQUEST_ADD_TASK);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mPresenter.result(requestCode, resultCode);
     }
 }
