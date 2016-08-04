@@ -22,6 +22,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class TasksPresenter implements TasksContract.Presenter{
     private final TasksRepository mTasksRepository;
     private final TasksContract.View mTasksView;
+    private int mCurrentFiltering = TasksFilterType.ALL_TASKS;
     // this class hold all of your Subscriptions
     /**
      * @see <a href="http://blog.danlew.net/2014/10/08/grokking-rxjava-part-4/"></a>
@@ -85,34 +86,40 @@ public class TasksPresenter implements TasksContract.Presenter{
          * unsubcribe old lists and subscribe new ones.
          */
         unsubscribe();
-        Subscription subscription = mTasksRepository
-                .getTasks()
-                .flatMap(new Func1<List<Task>, Observable<Task>>() {
-                    @Override
-                    public Observable<Task> call(List<Task> tasks) {
-                        return Observable.from(tasks);
+        Subscription subscription =
+                // get the list of tasks from all sources
+                mTasksRepository.getTasks()
+                // change the a list of task to emit each task.
+                .flatMap(Observable::from)
+                        /**
+                         * emit only those items from an Observable that pass a predicate test
+                         * ứng với current filter mà ta đang mở hiện tại trong screen, ta chỉ lấy task tương ứng thôi
+                         */
+                .filter(task -> {
+                    switch (mCurrentFiltering) {
+                        case TasksFilterType.ACTIVE_TASKS:
+                            return task.isActive();
+                        case TasksFilterType.COMPLETED_TASKS:
+                            return task.isCompleted();
+                        case TasksFilterType.ALL_TASKS:
+                        default:
+                            return true;
                     }
                 })
-                .filter(new Func1<Task, Boolean>() {
-                    @Override
-                    public Boolean call(Task task) {
-                        switch (mCurrentFiltering) {
-                            case ACTIVE_TASKS:
-                                return task.isActive();
-                            case COMPLETED_TASKS:
-                                return task.isCompleted();
-                            case ALL_TASKS:
-                            default:
-                                return true;
-                        }
-                    }
-                })
+                        /**
+                         * convert an Observable into another object or data structure
+                         * sau khi lọc ra được 1 dãy list thì ta gom lại thành 1 list duy nhất
+                         */
                 .toList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                        /**
+                         * nhờ hàm toList() ta có kết quả là 1 dãy task
+                         */
                 .subscribe(new Observer<List<Task>>() {
                     @Override
                     public void onCompleted() {
+                        // sau khi xong thì tắt load
                         mTasksView.setLoadingIndicator(false);
                     }
 
@@ -123,10 +130,45 @@ public class TasksPresenter implements TasksContract.Presenter{
 
                     @Override
                     public void onNext(List<Task> tasks) {
+                        // sau khi lấy được 1 dãy task thì ta xử lý nó
                         processTasks(tasks);
                     }
                 });
         mSubscriptions.add(subscription);
+    }
+
+    /**
+     * process tasks from database
+     * @param tasks
+     */
+    private void processTasks(List<Task> tasks) {
+        // if we dont have any task compare to filter type,
+        if (tasks.isEmpty()) {
+            // Show a message indicating there are no tasks for that filter type.
+            processEmptyTasks();
+        } else {
+            // Show the list of tasks
+            mTasksView.showTasks(tasks);
+            // Set the filter label's text.
+            showFilterLabel();
+        }
+    }
+
+    /**
+     * when we dont have any task in the category
+     */
+    private void processEmptyTasks() {
+        switch (mCurrentFiltering) {
+            case TasksFilterType.ACTIVE_TASKS:
+                mTasksView.showNoActiveTasks();
+                break;
+            case TasksFilterType.COMPLETED_TASKS:
+                mTasksView.showNoCompletedTasks();
+                break;
+            default:
+                mTasksView.showNoTasks();
+                break;
+        }
     }
 
 }

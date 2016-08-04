@@ -36,4 +36,17 @@ public class Task {
         mCompleted = completed;
     }
 
+    /**
+     * different from complete
+     * @return
+     */
+    public boolean isActive() {
+        return !mCompleted;
+    }
+
+    public boolean isCompleted() {
+        return mCompleted;
+    }
+
+
 }
