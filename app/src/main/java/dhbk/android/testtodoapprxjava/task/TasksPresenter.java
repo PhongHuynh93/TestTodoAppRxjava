@@ -9,6 +9,8 @@ import dhbk.android.testtodoapprxjava.addedittask.AddEditTaskActivity;
 import dhbk.android.testtodoapprxjava.data.Task;
 import dhbk.android.testtodoapprxjava.data.source.TasksDataSource;
 import dhbk.android.testtodoapprxjava.data.source.TasksRepository;
+import lombok.Getter;
+import lombok.Setter;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
@@ -24,6 +26,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class TasksPresenter implements TasksContract.Presenter{
     private final TasksRepository mTasksRepository;
     private final TasksContract.View mTasksView;
+    @Getter @Setter
     private int mCurrentFiltering = TasksFilterType.ALL_TASKS;
     // this class hold all of your Subscriptions
     /**
@@ -31,6 +34,7 @@ public class TasksPresenter implements TasksContract.Presenter{
      */
     private final CompositeSubscription mSubscriptions;
     private boolean mFirstLoad = true;
+    private int mFiltering;
 
     public TasksPresenter(@NonNull TasksRepository tasksRepository, @NonNull TasksContract.View tasksView) {
         mTasksRepository = checkNotNull(tasksRepository, "tasksRepository cannot be null");

@@ -26,7 +26,7 @@ public class TasksActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task);
+        setContentView(R.layout.tasks_act);
 
 
         // Set up the toolbar.
@@ -60,16 +60,15 @@ public class TasksActivity extends AppCompatActivity {
 
         // Load previously saved state, if available.
         if (savedInstanceState != null) {
-            TasksFilterType currentFiltering =
-                    (TasksFilterType) savedInstanceState.getSerializable(CURRENT_FILTERING_KEY);
-            mTasksPresenter.setFiltering(currentFiltering);
+            int currentFiltering = savedInstanceState.getInt(CURRENT_FILTERING_KEY);
+            mTasksPresenter.setMCurrentFiltering(currentFiltering);
         }
     }
 
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(CURRENT_FILTERING_KEY, mTasksPresenter.getFiltering());
+        outState.putInt(CURRENT_FILTERING_KEY, mTasksPresenter.getMCurrentFiltering());
         super.onSaveInstanceState(outState);
     }
 
