@@ -26,14 +26,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!--list of task-->
         <LinearLayout
             android:id="@+id/tasksLL"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <!--title for task-->
             <TextView
                 android:id="@+id/filteringLabel"
                 android:layout_width="match_parent"
@@ -45,14 +43,12 @@
                 android:gravity="center_vertical"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
-            <!--list tasks-->
             <ListView
                 android:id="@+id/tasks_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
-        <!--place holder for no task-->
         <LinearLayout
             android:id="@+id/noTasks"
             android:layout_width="wrap_content"
