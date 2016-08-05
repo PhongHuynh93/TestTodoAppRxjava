@@ -7,6 +7,7 @@ import java.util.List;
 
 import dhbk.android.testtodoapprxjava.addedittask.AddEditTaskActivity;
 import dhbk.android.testtodoapprxjava.data.Task;
+import dhbk.android.testtodoapprxjava.data.source.TasksDataSource;
 import dhbk.android.testtodoapprxjava.data.source.TasksRepository;
 import rx.Observable;
 import rx.Observer;
@@ -214,7 +215,7 @@ public class TasksPresenter implements TasksContract.Presenter{
     @Override
     public void openTaskDetails(@NonNull Task requestedTask) {
         checkNotNull(requestedTask, "requestedTask cannot be null!");
-        mTasksView.showTaskDetailsUi(requestedTask.getId());
+        mTasksView.showTaskDetailsUi(requestedTask.getMId());
     }
 
     @Override

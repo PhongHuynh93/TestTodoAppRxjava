@@ -25,6 +25,7 @@ import java.util.List;
 import dhbk.android.testtodoapprxjava.R;
 import dhbk.android.testtodoapprxjava.addedittask.AddEditTaskActivity;
 import dhbk.android.testtodoapprxjava.data.Task;
+import dhbk.android.testtodoapprxjava.taskdetail.TaskDetailActivity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -365,4 +366,16 @@ public class TasksFragment extends Fragment implements TasksContract.View {
         mFilteringLabelView.setText(getResources().getString(R.string.label_all));
     }
 
+    /**
+     * show task details with id
+     * @param taskId
+     */
+    @Override
+    public void showTaskDetailsUi(String taskId) {
+        // in it's own Activity, since it makes more sense that way and it gives us the flexibility
+        // to show some Intent stubbing.
+        Intent intent = new Intent(getContext(), TaskDetailActivity.class);
+        intent.putExtra(TaskDetailActivity.EXTRA_TASK_ID, taskId);
+        startActivity(intent);
+    }
 }
