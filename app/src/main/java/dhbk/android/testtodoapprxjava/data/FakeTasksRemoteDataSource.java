@@ -2,6 +2,7 @@ package dhbk.android.testtodoapprxjava.data;
 
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,5 +41,16 @@ public class FakeTasksRemoteDataSource implements TasksDataSource {
     @Override
     public void saveTask(Task task) {
 
+    }
+
+    @Override
+    public void clearCompletedTasks() {
+        Iterator<Map.Entry<String, Task>> it = TASKS_SERVICE_DATA.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, Task> entry = it.next();
+            if (entry.getValue().isCompleted()) {
+                it.remove();
+            }
+        }
     }
 }

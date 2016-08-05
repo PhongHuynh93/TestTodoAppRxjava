@@ -231,4 +231,27 @@ public class TasksPresenter implements TasksContract.Presenter{
     public void activateTask(Task activatedTask) {
 
     }
+
+    /**
+     * clear the tasks which has complete states
+     * so refresh the reposition
+     */
+    @Override
+    public void clearCompletedTasks() {
+        mTasksRepository.clearCompletedTasks();
+        mTasksView.showCompletedTasksCleared();
+        loadTasks(false, false);
+    }
+
+    /**
+     * Sets the current task filtering type.
+     *
+     * @param requestType Can be {@link TasksFilterType#ALL_TASKS},
+     *                    {@link TasksFilterType#COMPLETED_TASKS}, or
+     *                    {@link TasksFilterType#ACTIVE_TASKS}
+     */
+    @Override
+    public void setFiltering(int requestType) {
+        mCurrentFiltering = requestType;
+    }
 }

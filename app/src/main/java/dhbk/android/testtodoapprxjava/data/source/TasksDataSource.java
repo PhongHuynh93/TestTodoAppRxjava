@@ -16,4 +16,6 @@ public interface TasksDataSource {
     Observable<List<Task>> getTasks();
 
     void saveTask(Task task);
+
+    void clearCompletedTasks();
 }

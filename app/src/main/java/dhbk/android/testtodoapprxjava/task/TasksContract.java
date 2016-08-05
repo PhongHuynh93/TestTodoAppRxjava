@@ -18,6 +18,8 @@ public interface TasksContract {
 
         void showAddTask();
 
+        void showFilteringPopUpMenu();
+
         void setLoadingIndicator(boolean b);
 
         void showLoadingTasksError();
@@ -53,5 +55,9 @@ public interface TasksContract {
         void completeTask(Task completedTask);
 
         void activateTask(Task activatedTask);
+
+        void clearCompletedTasks();
+
+        void setFiltering(int activeTasks);
     }
 }

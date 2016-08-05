@@ -2,6 +2,7 @@ package dhbk.android.testtodoapprxjava.data.source;
 
 import android.support.annotation.NonNull;
 
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,7 @@ public class TasksRepository implements TasksDataSource {
     /**
      * Gets tasks from cache, local data source (SQLite) or remote data source, whichever is
      * available first.
+     *
      * @return Observable contains list of tasks
      */
     @Override
@@ -118,5 +120,25 @@ public class TasksRepository implements TasksDataSource {
     @Override
     public void saveTask(Task task) {
 
+    }
+
+    //    clear task in local db and remote db and cache
+    @Override
+    public void clearCompletedTasks() {
+        mTasksRemoteDataSource.clearCompletedTasks();
+        mTasksLocalDataSource.clearCompletedTasks();
+
+        // Do in memory cache update to keep the app UI up to date
+        if (mCachedTasks == null) {
+            mCachedTasks = new LinkedHashMap<>();
+        }
+        // remove complete task in cache
+        Iterator<Map.Entry<String, Task>> it = mCachedTasks.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, Task> entry = it.next();
+            if (entry.getValue().isCompleted()) {
+                it.remove();
+            }
+        }
     }
 }

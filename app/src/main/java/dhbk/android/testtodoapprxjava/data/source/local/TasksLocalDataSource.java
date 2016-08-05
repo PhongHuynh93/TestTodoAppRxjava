@@ -94,4 +94,11 @@ public class TasksLocalDataSource implements TasksDataSource {
         values.put(TasksPersistenceContract.TaskEntry.COLUMN_NAME_COMPLETED, task.isMCompleted());
         mDatabaseHelper.insert(TasksPersistenceContract.TaskEntry.TABLE_NAME, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
+
+    @Override
+    public void clearCompletedTasks() {
+        String selection = TasksPersistenceContract.TaskEntry.COLUMN_NAME_COMPLETED + " LIKE ?";
+        String[] selectionArgs = {"1"};
+        mDatabaseHelper.delete(TasksPersistenceContract.TaskEntry.TABLE_NAME, selection, selectionArgs);
+    }
 }
