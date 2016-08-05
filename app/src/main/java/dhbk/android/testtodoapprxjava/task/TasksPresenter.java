@@ -156,6 +156,23 @@ public class TasksPresenter implements TasksContract.Presenter{
     }
 
     /**
+     * show label above lists depend on state of tasks
+     */
+    private void showFilterLabel() {
+        switch (mCurrentFiltering) {
+            case TasksFilterType.ACTIVE_TASKS:
+                mTasksView.showActiveFilterLabel();
+                break;
+            case TasksFilterType.COMPLETED_TASKS:
+                mTasksView.showCompletedFilterLabel();
+                break;
+            default:
+                mTasksView.showAllFilterLabel();
+                break;
+        }
+    }
+
+    /**
      * when we dont have any task in the category
      */
     private void processEmptyTasks() {
@@ -183,5 +200,30 @@ public class TasksPresenter implements TasksContract.Presenter{
         if (AddEditTaskActivity.REQUEST_ADD_TASK == requestCode && Activity.RESULT_OK == resultCode) {
             mTasksView.showSuccessfullySavedMessage();
         }
+    }
+
+    @Override
+    public void addNewTask() {
+        mTasksView.showAddTask();
+    }
+
+    /**
+     * show detail list
+     * @param requestedTask
+     */
+    @Override
+    public void openTaskDetails(@NonNull Task requestedTask) {
+        checkNotNull(requestedTask, "requestedTask cannot be null!");
+        mTasksView.showTaskDetailsUi(requestedTask.getId());
+    }
+
+    @Override
+    public void completeTask(Task completedTask) {
+
+    }
+
+    @Override
+    public void activateTask(Task activatedTask) {
+
     }
 }

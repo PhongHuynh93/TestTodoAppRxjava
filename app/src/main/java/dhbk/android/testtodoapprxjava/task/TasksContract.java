@@ -31,11 +31,25 @@ public interface TasksContract {
         void showNoTasks();
 
         void showSuccessfullySavedMessage();
+
+        void showActiveFilterLabel();
+
+        void showCompletedFilterLabel();
+
+        void showAllFilterLabel();
     }
 
     interface Presenter extends BasePresenter {
         void loadTasks(boolean forceUpdate);
 
         void result(int requestCode, int resultCode);
+
+        void addNewTask();
+
+        void openTaskDetails(Task clickedTask);
+
+        void completeTask(Task completedTask);
+
+        void activateTask(Task activatedTask);
     }
 }

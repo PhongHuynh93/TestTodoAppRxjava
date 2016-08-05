@@ -101,12 +101,7 @@ public class TasksFragment extends Fragment implements TasksContract.View {
         // Set the scrolling view in the custom SwipeRefreshLayout.
         swipeRefreshLayout.setScrollUpChild(listView);
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPresenter.loadTasks(false);
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> mPresenter.loadTasks(false));
 
         setHasOptionsMenu(true);
 
@@ -130,11 +125,19 @@ public class TasksFragment extends Fragment implements TasksContract.View {
      * Listener for clicks on tasks in the ListView.
      */
     TaskItemListener mItemListener = new TaskItemListener() {
+        /**
+         * when click the item
+         * @param clickedTask
+         */
         @Override
         public void onTaskClick(Task clickedTask) {
             mPresenter.openTaskDetails(clickedTask);
         }
 
+        /**
+         * when click the checkbox
+         * @param completedTask
+         */
         @Override
         public void onCompleteTaskClick(Task completedTask) {
             mPresenter.completeTask(completedTask);
@@ -191,6 +194,9 @@ public class TasksFragment extends Fragment implements TasksContract.View {
             return i;
         }
 
+        /**
+         * add listen on each row of list.
+         */
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             View rowView = view;
@@ -216,23 +222,17 @@ public class TasksFragment extends Fragment implements TasksContract.View {
                         .getResources().getDrawable(R.drawable.touch_feedback));
             }
 
-            completeCB.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!task.isCompleted()) {
-                        mItemListener.onCompleteTaskClick(task);
-                    } else {
-                        mItemListener.onActivateTaskClick(task);
-                    }
+//            listen when click the check box
+            completeCB.setOnClickListener(v -> {
+                if (!task.isCompleted()) {
+                    mItemListener.onCompleteTaskClick(task);
+                } else {
+                    mItemListener.onActivateTaskClick(task);
                 }
             });
 
-            rowView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mItemListener.onTaskClick(task);
-                }
-            });
+//            if we click one item in list
+            rowView.setOnClickListener(view1 -> mItemListener.onTaskClick(task));
 
             return rowView;
         }
@@ -308,7 +308,8 @@ public class TasksFragment extends Fragment implements TasksContract.View {
     }
 
     /**
-     *  show different layout with text and icon when no tasks found
+     * show different layout with text and icon when no tasks found
+     *
      * @param mainText
      * @param iconRes
      * @param showAddView
@@ -344,4 +345,24 @@ public class TasksFragment extends Fragment implements TasksContract.View {
     public void showSuccessfullySavedMessage() {
         showMessage(getString(R.string.successfully_saved_task_message));
     }
+
+
+    /**
+     * show label above list
+     */
+    @Override
+    public void showActiveFilterLabel() {
+        mFilteringLabelView.setText(getResources().getString(R.string.label_active));
+    }
+
+    @Override
+    public void showCompletedFilterLabel() {
+        mFilteringLabelView.setText(getResources().getString(R.string.label_completed));
+    }
+
+    @Override
+    public void showAllFilterLabel() {
+        mFilteringLabelView.setText(getResources().getString(R.string.label_all));
+    }
+
 }
