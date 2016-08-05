@@ -431,4 +431,9 @@ public class TasksFragment extends Fragment implements TasksContract.View {
         intent.putExtra(TaskDetailActivity.EXTRA_TASK_ID, taskId);
         startActivity(intent);
     }
+
+    @Override
+    public void showCompletedTasksCleared() {
+        showMessage(getString(R.string.completed_tasks_cleared));
+    }
 }

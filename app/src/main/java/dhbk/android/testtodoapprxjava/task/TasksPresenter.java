@@ -238,8 +238,9 @@ public class TasksPresenter implements TasksContract.Presenter{
      */
     @Override
     public void clearCompletedTasks() {
-        mTasksRepository.clearCompletedTasks();
-        mTasksView.showCompletedTasksCleared();
+        mTasksRepository.clearCompletedTasks();  // clear in db
+        mTasksView.showCompletedTasksCleared(); // show a snackbar
+        // load new tasks
         loadTasks(false, false);
     }
 

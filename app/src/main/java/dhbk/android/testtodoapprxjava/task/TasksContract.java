@@ -41,6 +41,8 @@ public interface TasksContract {
         void showAllFilterLabel();
 
         void showTaskDetailsUi(String mId);
+
+        void showCompletedTasksCleared();
     }
 
     interface Presenter extends BasePresenter {
